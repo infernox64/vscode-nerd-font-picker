@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'FiraCodeNF';
+    src: url('${fontUri}') format('truetype');
+}
+
+body {
+    background-color: var(--vscode-sideBar-background);
+    color: var(--vscode-sideBar-foreground);
+    font-family: sans-serif;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 10px;
+}
+
+.glyph-card {
+    font-family: 'FiraCodeNF';
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.glyph-card:hover {
+    background: var(--vscode-list-hoverBackground);
+}
