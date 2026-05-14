@@ -1,32 +1,57 @@
+// 1. Establish the connection to the VS Code API
 const vscode = acquireVsCodeApi();
-let glyphs = [];
 
-// This will be called once we load the JSON data
-function updateGrid(filter = "") {
+// State management
+let allGlyphs = [];
+
+// 2. Listen for the "loadData" command from extension.ts
+window.addEventListener("message", (event) => {
+  const message = event.data;
+  switch (message.command) {
+    case "loadData":
+      allGlyphs = message.data;
+      renderGrid(allGlyphs);
+      break;
+  }
+});
+
+/**
+ * Renders the icons into the HTML grid
+ * @param {Array} glyphs - The array of glyph objects to display
+ */
+function renderGrid(glyphs) {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
 
-  const filtered = glyphs.filter(
-    (g) =>
-      g.name.toLowerCase().includes(filter.toLowerCase()) ||
-      g.hex.toLowerCase().includes(filter.toLowerCase()),
-  );
-
-  filtered.forEach((g) => {
+  glyphs.forEach((glyph) => {
     const card = document.createElement("div");
     card.className = "glyph-card";
-    card.innerHTML = `
-            <div class="icon">${g.char}</div>
-            <div class="hex">${g.hex}</div>
-        `;
-    card.title = g.name;
 
+    // Use the hex code and the character for the UI
+    card.innerHTML = `
+            <div class="icon">${glyph.char}</div>
+            <div class="hex">${glyph.hex}</div>
+        `;
+    card.title = glyph.name;
+
+    // 3. Send the selection back to the editor when clicked
     card.onclick = () => {
-      // Insert the format used in OMP/JSON configs
-      vscode.postMessage({ value: `\\u${g.hex}` });
+      vscode.postMessage({
+        value: `\\u${glyph.hex}`, // Perfect for OMP/JSON configs
+      });
     };
+
     grid.appendChild(card);
   });
 }
 
-document.getElementById("search").oninput = (e) => updateGrid(e.target.value);
+// 4. Handle real-time searching
+document.getElementById("search").addEventListener("input", (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+  const filtered = allGlyphs.filter(
+    (g) =>
+      g.name.toLowerCase().includes(searchTerm) ||
+      g.hex.toLowerCase().includes(searchTerm),
+  );
+  renderGrid(filtered);
+});

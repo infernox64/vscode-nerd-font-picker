@@ -9,7 +9,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onView:nerd-font-picker-view"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "viewsContainers": {
@@ -24,7 +26,6 @@
     "views": {
       "nerd-font-explorer": [
         {
-          "icon": "resources/explorer.svg",
           "type": "webview",
           "id": "nerd-font-picker-view",
           "name": "Search Glyphs"

@@ -1,6 +1,15 @@
+
+/* 1. Tell the webview where the file is and give it a nickname */
 @font-face {
-    font-family: 'FiraCodeNF';
+    font-family: 'PickerFont';
     src: url('${fontUri}') format('truetype');
+}
+
+/* 2. Use that nickname for the icons */
+.icon {
+    font-family: 'PickerFont';
+    font-size: 24px;
+    margin-bottom: 4px;
 }
 
 body {
@@ -16,7 +25,7 @@ body {
 }
 
 .glyph-card {
-    font-family: 'FiraCodeNF';
+    font-family: 'PickerFont';
     font-size: 24px;
     display: flex;
     flex-direction: column;

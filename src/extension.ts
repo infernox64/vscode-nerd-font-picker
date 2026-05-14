@@ -17,7 +17,11 @@ class NerdFontProvider implements vscode.WebviewViewProvider {
   public resolveWebviewView(webviewView: vscode.WebviewView) {
     webviewView.webview.options = {
       enableScripts: true,
-      localResourceRoots: [this._extensionUri],
+      // This allows the webview to access your CSS, JS, and Fonts
+      localResourceRoots: [
+        vscode.Uri.joinPath(this._extensionUri, "resources"),
+        this._extensionUri,
+      ],
     };
 
     // 1. Set the initial HTML structure
@@ -65,8 +69,14 @@ class NerdFontProvider implements vscode.WebviewViewProvider {
       vscode.Uri.joinPath(this._extensionUri, "resources", "style.css"),
     );
     const fontUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "resources", "FiraCode_NF.ttf"),
+      vscode.Uri.joinPath(this._extensionUri, "resources", "Firacode_NF.ttf"),
     );
+    // 1. Read the CSS file as text
+const stylePath = vscode.Uri.joinPath(this._extensionUri, "resources", "style.css");
+let styleContents = fs.readFileSync(stylePath.fsPath, "utf8");
+
+// 2. Manually replace the fontUri inside the CSS string
+styleContents = styleContents.replace(/\${fontUri}/g, fontUri.toString());
 
     // Read the HTML scaffold
     const htmlPath = vscode.Uri.joinPath(
@@ -79,7 +89,7 @@ class NerdFontProvider implements vscode.WebviewViewProvider {
     // Replace the placeholders with the actual generated URIs
     return html
       .replace(/\${scriptUri}/g, scriptUri.toString())
-      .replace(/\${styleUri}/g, styleUri.toString())
+      .replace("</head>", `<style>${styleContents}</style></head>`)
       .replace(/\${fontUri}/g, fontUri.toString())
       .replace(/\${cspSource}/g, webview.cspSource);
   }

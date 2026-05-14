@@ -1,10 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${cspSource}; style-src ${cspSource} 'unsafe-inline'; script-src ${cspSource} 'unsafe-inline';">
-    <link rel="stylesheet" href="${styleUri}">
-    <style>
-        @font-face {
-            font-family: 'FiraCodeNF';
-            src: url('${fontUri}') format('truetype');
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+  
+    <title>Nerd Font Picker</title>
 </head>
+<body>
+    <div class="container">
+        <div class="search-container">
+            <input 
+                type="text" 
+                id="search" 
+                placeholder="Search icons (e.g. 'python', 'git')..."
+                autocomplete="off"
+            >
+        </div>
+
+        <div id="grid" class="glyph-grid">
+            <div class="loading-state">Loading glyphs...</div>
+        </div>
+    </div>
+
+    <script src="${scriptUri}"></script>
+</body>
+</html>
