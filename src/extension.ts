@@ -17,43 +17,39 @@ class NerdFontProvider implements vscode.WebviewViewProvider {
   public resolveWebviewView(webviewView: vscode.WebviewView) {
     webviewView.webview.options = {
       enableScripts: true,
-      // This allows the webview to access your CSS, JS, and Fonts
       localResourceRoots: [
         vscode.Uri.joinPath(this._extensionUri, "resources"),
         this._extensionUri,
       ],
     };
 
-    // 1. Set the initial HTML structure
+    // 1. Return the HTML immediately so the sidebar appears
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-    // 2. Load the Glyph data from the resources folder
+    // 2. Load and push data ASYNCHRONOUSLY
     const jsonPath = vscode.Uri.joinPath(
       this._extensionUri,
       "resources",
       "glyphs.json",
     );
 
-    try {
-      const jsonData = fs.readFileSync(jsonPath.fsPath, "utf8");
-
-      // We use a small delay to ensure main.js is loaded and listening
-      setTimeout(() => {
+    // Using a small timeout ensures the main.js listener is ready
+    setTimeout(() => {
+      try {
+        const jsonData = fs.readFileSync(jsonPath.fsPath, "utf8");
         webviewView.webview.postMessage({
           command: "loadData",
           data: JSON.parse(jsonData),
         });
-      }, 500);
-    } catch (err) {
-      console.error("Failed to load glyphs.json:", err);
-    }
+      } catch (err) {
+        console.error("Failed to load glyphs:", err);
+      }
+    }, 100);
 
-    // 3. Handle messages sent from the Webview (insertion logic)
     webviewView.webview.onDidReceiveMessage((data) => {
       const editor = vscode.window.activeTextEditor;
       if (editor) {
         editor.edit((editBuilder) => {
-          // Inserts the selected glyph at the current cursor position
           editBuilder.insert(editor.selection.active, data.value);
         });
       }
@@ -61,7 +57,6 @@ class NerdFontProvider implements vscode.WebviewViewProvider {
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
-    // Generate the internal Webview URIs for our resources
     const scriptUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "resources", "main.js"),
     );
@@ -69,16 +64,9 @@ class NerdFontProvider implements vscode.WebviewViewProvider {
       vscode.Uri.joinPath(this._extensionUri, "resources", "style.css"),
     );
     const fontUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "resources", "Firacode_NF.ttf"),
+      vscode.Uri.joinPath(this._extensionUri, "resources", "FiraCode_NF.ttf"),
     );
-    // 1. Read the CSS file as text
-const stylePath = vscode.Uri.joinPath(this._extensionUri, "resources", "style.css");
-let styleContents = fs.readFileSync(stylePath.fsPath, "utf8");
 
-// 2. Manually replace the fontUri inside the CSS string
-styleContents = styleContents.replace(/\${fontUri}/g, fontUri.toString());
-
-    // Read the HTML scaffold
     const htmlPath = vscode.Uri.joinPath(
       this._extensionUri,
       "resources",
@@ -86,10 +74,10 @@ styleContents = styleContents.replace(/\${fontUri}/g, fontUri.toString());
     );
     let html = fs.readFileSync(htmlPath.fsPath, "utf8");
 
-    // Replace the placeholders with the actual generated URIs
+    // CLEANUP: Removed the blocking postMessage from here
     return html
       .replace(/\${scriptUri}/g, scriptUri.toString())
-      .replace("</head>", `<style>${styleContents}</style></head>`)
+      .replace(/\${styleUri}/g, styleUri.toString())
       .replace(/\${fontUri}/g, fontUri.toString())
       .replace(/\${cspSource}/g, webview.cspSource);
   }
