@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import * as fs from "fs"; // Required to read your picker.html
+import * as fs from "fs";
 
 export function activate(context: vscode.ExtensionContext) {
   const provider = new NerdFontProvider(context.extensionUri);
@@ -20,13 +20,36 @@ class NerdFontProvider implements vscode.WebviewViewProvider {
       localResourceRoots: [this._extensionUri],
     };
 
-    // Pass the webview to the generator
+    // 1. Set the initial HTML structure
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
+    // 2. Load the Glyph data from the resources folder
+    const jsonPath = vscode.Uri.joinPath(
+      this._extensionUri,
+      "resources",
+      "glyphs.json",
+    );
+
+    try {
+      const jsonData = fs.readFileSync(jsonPath.fsPath, "utf8");
+
+      // We use a small delay to ensure main.js is loaded and listening
+      setTimeout(() => {
+        webviewView.webview.postMessage({
+          command: "loadData",
+          data: JSON.parse(jsonData),
+        });
+      }, 500);
+    } catch (err) {
+      console.error("Failed to load glyphs.json:", err);
+    }
+
+    // 3. Handle messages sent from the Webview (insertion logic)
     webviewView.webview.onDidReceiveMessage((data) => {
       const editor = vscode.window.activeTextEditor;
       if (editor) {
         editor.edit((editBuilder) => {
+          // Inserts the selected glyph at the current cursor position
           editBuilder.insert(editor.selection.active, data.value);
         });
       }
@@ -34,7 +57,7 @@ class NerdFontProvider implements vscode.WebviewViewProvider {
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
-    // 1. Generate the URIs
+    // Generate the internal Webview URIs for our resources
     const scriptUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "resources", "main.js"),
     );
@@ -45,7 +68,7 @@ class NerdFontProvider implements vscode.WebviewViewProvider {
       vscode.Uri.joinPath(this._extensionUri, "resources", "FiraCode_NF.ttf"),
     );
 
-    // 2. Read the HTML file
+    // Read the HTML scaffold
     const htmlPath = vscode.Uri.joinPath(
       this._extensionUri,
       "resources",
@@ -53,8 +76,7 @@ class NerdFontProvider implements vscode.WebviewViewProvider {
     );
     let html = fs.readFileSync(htmlPath.fsPath, "utf8");
 
-    // 3. Swap placeholders
-    // We use a simple regex to replace ${variableName} in your HTML file
+    // Replace the placeholders with the actual generated URIs
     return html
       .replace(/\${scriptUri}/g, scriptUri.toString())
       .replace(/\${styleUri}/g, styleUri.toString())
