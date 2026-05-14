@@ -1,71 +1,35 @@
-# nerd-fonts README
+# Nerd Fonts
 
-This is the README for your extension "nerd-fonts". After writing up a brief description, we recommend including the following sections.
+A VS Code extension for searching, previewing, and inserting Nerd Font icons with ease.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Search Icons**: Find Nerd Font icons by name or unicode hex value
+- **Preview**: See icons rendered in real-time before inserting
+- **Insert Icons**: Quickly insert Nerd Font icons directly into your code
+- **Unicode Hex Support**: Look up icons using their unicode hex codes
+- **Fast & Lightweight**: Minimal overhead with instant results
 
-For example if there is an image subfolder under your extension project workspace:
+## Usage
 
-\!\[feature X\]\(images/feature-x.png\)
+1. Open the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
+2. Search for "Nerd Fonts" command
+3. Type the icon name or unicode hex (e.g., `f47e` or `github`)
+4. Preview the icon and press Enter to insert
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Supported Nerd Fonts
 
-## Requirements
+- Font Awesome
+- Powerline Symbols
+- Octicons
+- Devicons
+- Codicons
+- And more...
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## Installation
 
-## Extension Settings
+Install from the VS Code Extension Marketplace or manually add this extension to your VS Code extensions folder.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+## License
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+MIT

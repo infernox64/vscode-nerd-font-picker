@@ -11,27 +11,27 @@
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
- "contributes": {
-  "viewsContainers": {
-    "activitybar": [
-      {
-        "id": "nerd-font-explorer",
-        "title": "Nerd Font Picker",
-        "icon": "resources/icon.svg"
-      }
-    ]
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "nerd-font-explorer",
+          "title": "Nerd Font Picker",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "nerd-font-explorer": [
+        {
+          "icon": "resources/explorer.svg",
+          "type": "webview",
+          "id": "nerd-font-picker-view",
+          "name": "Search Glyphs"
+        }
+      ]
+    }
   },
-  "views": {
-    "nerd-font-explorer": [
-      {
-        "icon": "resources/explorer.svg",
-        "type": "webview",
-        "id": "nerd-font-picker-view",
-        "name": "Search Glyphs"
-      }
-    ]
-  }
-},
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "npm run check-types && npm run lint && node esbuild.js",
@@ -47,15 +47,15 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.118.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "22.x",
-    "typescript-eslint": "^8.56.1",
-    "eslint": "^9.39.3",
+    "@types/node": "^22.19.19",
+    "@types/vscode": "^1.118.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
     "esbuild": "^0.27.3",
+    "eslint": "^9.39.3",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.9.3",
-    "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2"
+    "typescript-eslint": "^8.56.1"
   }
 }

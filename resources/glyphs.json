@@ -1,0 +1,15 @@
+[
+  { "name": "python", "hex": "e73c", "char": "" },
+  { "name": "javascript", "hex": "e781", "char": "" },
+  { "name": "folder", "hex": "f115", "char": "" },
+  { "name": "github", "hex": "f09b", "char": "" },
+  { "name": "rust", "hex": "e7a8", "char": "" },
+  { "name": "nodejs", "hex": "e718", "char": "" },
+  { "name": "branch", "hex": "e0a0", "char": "" },
+  { "name": "lock", "hex": "f023", "char": "" },
+  { "name": "arch", "hex": "f303", "char": "" },
+  { "name": "windows", "hex": "f17a", "char": "" },
+  { "name": "docker", "hex": "f308", "char": "" },
+  { "name": "home", "hex": "f015", "char": "" },
+  { "name": "clock", "hex": "f017", "char": "" }
+]
